@@ -1,0 +1,5 @@
+/nbproject
+/.idea
+/phpinstaller
+create_installer.php
+config.php
