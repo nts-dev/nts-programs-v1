@@ -1,34 +1,38 @@
 <?php
-include ('includes.php')
-//use session\auth\AuthenticationServiceImpl;
-//
-//include('nts-video/api/session/Commons.php');
-//
-//$service = new AuthenticationServiceImpl();
-//
-//$username = $password = "";
-//$username_err = $password_err = $login_err = "";
-//
-//if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//
-//    $userId = $_POST["trainee"];
-//    // Validate username
-//    if (empty(trim($_POST["trainee"])))
-//        $username_err = "Please enter a username.";
-//    elseif (empty(trim($_POST["identifier"])))
-//        $password_err = "Please enter a password.";
-//    else {
-//        $authenticated = $service->authenticateClient(
-//            filter_input(INPUT_POST, 'trainee', FILTER_SANITIZE_NUMBER_INT),
-//            filter_input(INPUT_POST, 'identifier', FILTER_SANITIZE_STRING)
-//        );
-//        if ($authenticated)
-//            header("location: index.php?eid=" . $userId);
-//
-//        else
-//            $login_err = "Error";
-//    }
-//}
+
+use auth\AuthenticationServiceImpl;
+
+include('auth.php');
+
+$service = new AuthenticationServiceImpl();
+
+$username = $password = "";
+$username_err = $password_err = $login_err = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $userId = $_POST["trainee"];
+    // Validate username
+    if (empty(trim($_POST["trainee"])))
+        $username_err = "Please enter a username.";
+    elseif (empty(trim($_POST["identifier"])))
+        $password_err = "Please enter a password.";
+    else {
+        $authenticated = $service->authenticateClient(
+            filter_input(INPUT_POST, 'trainee', FILTER_SANITIZE_NUMBER_INT),
+            filter_input(INPUT_POST, 'identifier', FILTER_SANITIZE_STRING)
+        );
+
+        if ($authenticated === null) {
+            $login_err = "Error";
+            header("location: ". WEBROOT);
+            die();
+        }
+
+        header("location: index.php");
+
+    }
+}
 
 ?>
 
