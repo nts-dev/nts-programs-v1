@@ -9,7 +9,7 @@
 
 Open a new terminal window and navigate to the server root and clone the programs run the follwing command:
 
-`git clone --recurse-submodules https://github.com/nts-dev/nts-programs-v1`
+`git clone --recurse-submodules https://github.com/nts-dev/nts-programs.git`
 
 ## Updating the application
 
