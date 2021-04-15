@@ -26,6 +26,8 @@ interface AuthenticationService
 
     function storeUserSession(\UserSession $auth);
 
+    function storeErrorSession($error);
+
     function getSession();
 
     function logout();
