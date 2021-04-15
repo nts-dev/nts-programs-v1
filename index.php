@@ -7,7 +7,7 @@ require 'auth.php';
  * TODO change in installer later
  */
 if (!file_exists('Boot.php')) {
-    header("Location: " . WEBURL . basename(dirname(__FILE__)) . "/install.php");
+    header("Location: " . WEBURL .'/'. basename(dirname(__FILE__)) . "/install.php");
     exit;
 }
 
