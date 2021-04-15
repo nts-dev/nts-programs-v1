@@ -1,12 +1,10 @@
 <?php
 
-namespace session\auth\client;
+namespace session\auth;
 
 
 use PHPUnit\Exception;
-use session\auth\UserBO;
-use session\auth\UserDao;
-use session\auth\UserDaoImp;
+
 
 
 class ClientBO implements UserClient
@@ -35,8 +33,8 @@ class ClientBO implements UserClient
             $this->user->setEmail($row['email']);
             $this->user->setFirstName($row['firstName']);
             $this->user->setLastName($row['lastName']);
-            $this->user->setPassword($password);
-            $this->user->setTraineeId($traineeId);
+            $this->user->setPassword($this->password);
+            $this->user->setTraineeId($row['contact_id']);
             $this->user->setAttendent($row['contact_attendent']);
 
             return $this->user;

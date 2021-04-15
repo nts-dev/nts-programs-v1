@@ -1,6 +1,6 @@
 <?php
 
-namespace session\auth\client;
+namespace session\auth;
 interface  UserClient
 {
     function authenticate();

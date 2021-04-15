@@ -6,7 +6,7 @@ namespace session\auth;
 use  \session\auth;
 
 
-class UserDaoImp implements UserDao, \UserData
+class UserDaoImp implements UserDao, UserData
 {
 
     private QueryExecutor $queryExecutor;

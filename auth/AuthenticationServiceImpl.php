@@ -3,11 +3,11 @@
 namespace auth;
 
 
-use session\auth\client\ClientBO;
-use session\auth\client\ClientContext;
-use session\auth\client\ClientFlare;
+use session\auth\ClientBO;
+use session\auth\ClientFlare;
 use session\auth\User;
 use session\auth\UserBO;
+use session\auth\UserClientContext;
 use session\auth\UserFlare;
 use UserSession;
 
@@ -71,17 +71,17 @@ class AuthenticationServiceImpl implements AuthenticationService
      *
      * @param $traineeId
      * @param $password
-     * @return UserBO|null
+     * @return User
      *
      *
      *
      *
      *
      */
-    private function authenticateFromBO($traineeId, $password): ?UserBO
+    private function authenticateFromBO($traineeId, $password): User
     {
 
-        $client = new ClientContext(new ClientBO($traineeId, $password));
+        $client = new UserClientContext(new ClientBO($traineeId, $password));
         return $client->authenticate();
     }
 
@@ -104,7 +104,7 @@ class AuthenticationServiceImpl implements AuthenticationService
 
         assert($user != null);
 
-        $client = new ClientContext(new ClientFlare($user));
+        $client = new UserClientContext(new ClientFlare($user));
         return $client->authenticate();
     }
 

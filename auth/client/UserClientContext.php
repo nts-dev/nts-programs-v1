@@ -1,7 +1,8 @@
 <?php
 
 
-namespace session\auth\client;
+namespace session\auth;
+use session\auth\User;
 
 
 class UserClientContext

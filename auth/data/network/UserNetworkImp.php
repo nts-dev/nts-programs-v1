@@ -1,6 +1,6 @@
 <?php
 
-
+namespace session\auth;
 class UserNetworkImp implements UserNetwork, UserData
 {
 

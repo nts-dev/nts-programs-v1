@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($authenticated === null) {
             $login_err = "Error";
-            header("location: ". WEBROOT);
+            header("location: ". WEBROOT . Boot::WWWROOT);
             die();
         }
 

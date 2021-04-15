@@ -11,7 +11,6 @@ class QueryExecutor
 
     function __construct()
     {
-//        $sessionDatabase = SessionDatabase::getInstance();
         $this->conn = SessionDatabase::getInstance()::getConnection();
     }
 

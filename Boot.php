@@ -8,5 +8,4 @@ class Boot {
     const DBPASS = 'kenya1234';
     const DBNAME = 'nts_projects';
     const WWWROOT = '/'; //TODO ref extracted from user input
-
 }

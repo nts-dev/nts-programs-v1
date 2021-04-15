@@ -1,23 +1,20 @@
 <?php
 
-namespace session\auth\client;
+namespace session\auth;
 
-
-
-use session\auth\UserBO;
-use session\auth\UserFlare;
+use PHPUnit\Exception;
 
 class ClientFlare implements UserClient
 {
 
     private UserBO $user;
-    private \UserNetwork $network;
+    private UserNetwork $network;
 
     public function __construct(UserBO $user)
     {
         assert($user != null);
 
-        $this->network = new \UserNetworkImp();
+        $this->network = new UserNetworkImp();
         $this->user = $user;
     }
 
@@ -36,7 +33,7 @@ class ClientFlare implements UserClient
 
                 return $authenticatedUser;
             }
-        }catch (Exeption $e){
+        }catch (Exception $e){
 
         }
 
