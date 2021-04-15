@@ -5,10 +5,10 @@ namespace auth;
 
 use session\auth\ClientBO;
 use session\auth\ClientFlare;
-use session\auth\User;
+use session\auth\Response;
+use session\auth\State;
 use session\auth\UserBO;
 use session\auth\UserClientContext;
-use session\auth\UserFlare;
 use UserSession;
 
 
@@ -16,7 +16,7 @@ class AuthenticationServiceImpl implements AuthenticationService
 {
 
 
-    function authenticateClient($traineeId, $password): ?UserSession
+    function authenticateClient($traineeId, $password): bool
     {
 
         assert($traineeId != null);
@@ -26,10 +26,14 @@ class AuthenticationServiceImpl implements AuthenticationService
          *
          * 1 Authenticate user from BO
          */
-        $BOAuthenticatedUser = $this->authenticateFromBO($traineeId, $password);
+        $BOResponse = $this->authenticateFromBO($traineeId, $password);
 
-        if ($BOAuthenticatedUser == null) {
-            return null;
+
+//        var_dump($BOAuthenticatedUser);
+
+        if ($BOResponse->getState() == State::FAIL) {
+             $this->storeErrorSession($BOResponse->getMessage());
+            return false;
         }
 
 
@@ -37,11 +41,14 @@ class AuthenticationServiceImpl implements AuthenticationService
          *
          * 2 Request token from flare api
          */
-        $FLAREAuthenticatedUser = $this->authenticateFromFlare($BOAuthenticatedUser);
+        $FlareResponse = $this->authenticateFromFlare($BOResponse->getUser());
+
+//        var_dump($FLAREAuthenticatedUser);
 
 
-        if ($FLAREAuthenticatedUser == null) {
-            return null;
+        if ($FlareResponse == State::FAIL) {
+            $this->storeErrorSession($FlareResponse->getMessage());
+            return false;
         }
 
 
@@ -51,16 +58,13 @@ class AuthenticationServiceImpl implements AuthenticationService
          */
 
 
-        if (isset($authResult->access_token)) {
-            $userSession = new UserSession();
-            $userSession->setFlareUser($FLAREAuthenticatedUser);
-            $userSession->setBOUser($BOAuthenticatedUser);
-            $this->storeSession($userSession);
-            return $userSession;
-        }
+        $userSession = new UserSession();
+        $userSession->setFlareUser($FlareResponse->getUser());
+        $userSession->setBOUser($BOResponse->getUser());
+        $this->storeUserSession($userSession);
 
 
-        return null;
+        return true;
     }
 
     /**
@@ -71,14 +75,12 @@ class AuthenticationServiceImpl implements AuthenticationService
      *
      * @param $traineeId
      * @param $password
-     * @return User
-     *
-     *
+     * @return Response
      *
      *
      *
      */
-    private function authenticateFromBO($traineeId, $password): User
+    private function authenticateFromBO($traineeId, $password): Response
     {
 
         $client = new UserClientContext(new ClientBO($traineeId, $password));
@@ -93,13 +95,12 @@ class AuthenticationServiceImpl implements AuthenticationService
      *
      *
      * @param UserBO $user type of UserBO
-     * @return User|null type of UserFlare
-     *
+     * @return Response type of UserFlare
      *
      *
      *
      */
-    private function authenticateFromFlare(UserBO $user): ?UserFlare
+    private function authenticateFromFlare(UserBO $user): Response
     {
 
         assert($user != null);
@@ -116,18 +117,24 @@ class AuthenticationServiceImpl implements AuthenticationService
      *
      *
      *
-     * @param $auth
-     *
+     * @param UserSession $auth
      *
      *
      *
      *
      */
 
-    function storeSession(UserSession $auth)
+    function storeUserSession(UserSession $auth)
     {
         assert($auth != null);
         $_SESSION["USER"] = serialize($auth);
+        session_commit();
+
+    }
+
+    function storeErrorSession($error)
+    {
+        $_SESSION["ERRORS"] = serialize($error);
         session_commit();
 
     }

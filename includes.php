@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 
 define('PACKAGEPATH', __DIR__);
 
-define('WEBURL', "http://{$_SERVER['HTTP_HOST']}/");
+define('WEBURL', "http://{$_SERVER['HTTP_HOST']}");
 
 
 
@@ -14,4 +14,4 @@ include(PACKAGEPATH . '/Boot.php');
 include(PACKAGEPATH . '/packages/CSSPackage.php');
 include(PACKAGEPATH . '/packages/JSPackage.php');
 
-define('WEBROOT', "http://{$_SERVER['HTTP_HOST']}/");
+//define('WEBROOT', "http://{$_SERVER['HTTP_HOST']}");

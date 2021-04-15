@@ -15,7 +15,7 @@ class UserClientContext
     }
 
 
-    public function authenticate() : ? User{
+    public function authenticate(){
        return $this->client->authenticate();
     }
 

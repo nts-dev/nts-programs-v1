@@ -26,10 +26,14 @@ class ClientBO implements UserClient
         $this->user = new UserBO();
     }
 
-    function authenticate(): ?UserBO
+    function authenticate() : Response
     {
         try {
             $row =  $this->dao->getUser($this->traineeId, $this->password);
+
+            if ($row == null)
+                return new Response(State::FAIL, $this->user);
+
             $this->user->setEmail($row['email']);
             $this->user->setFirstName($row['firstName']);
             $this->user->setLastName($row['lastName']);
@@ -37,11 +41,10 @@ class ClientBO implements UserClient
             $this->user->setTraineeId($row['contact_id']);
             $this->user->setAttendent($row['contact_attendent']);
 
-            return $this->user;
+            return new Response(State::SUCCESS, $this->user);
 
         } catch (Exception $e) {
-
+            return new Response(State::FAIL, $this->user, $e->getMessage());
         }
-        return null;
     }
 }

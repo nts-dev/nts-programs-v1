@@ -30,7 +30,6 @@ class QueryExecutor
                     branch_id,
                     trainees.FirstName firstName,
                     trainees.LastName lastName,
-
 				    email,
                     pass
             FROM

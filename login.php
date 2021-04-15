@@ -18,14 +18,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     elseif (empty(trim($_POST["identifier"])))
         $password_err = "Please enter a password.";
     else {
-        $authenticated = $service->authenticateClient(
+
+        if (isset($_SESSION['ERRORS']))
+            unset($_SESSION["ERRORS"]);
+
+       $isAuthenticated =  $service->authenticateClient(
             filter_input(INPUT_POST, 'trainee', FILTER_SANITIZE_NUMBER_INT),
             filter_input(INPUT_POST, 'identifier', FILTER_SANITIZE_STRING)
         );
 
-        if ($authenticated === null) {
-            $login_err = "Error";
-            header("location: ". WEBROOT . Boot::WWWROOT);
+        if (!$isAuthenticated || isset($_SESSION['ERRORS'])) {
+            $login_err = unserialize($_SESSION['ERRORS']);
+            echo $login_err;
+            header("location: " . WEBURL . Boot::WWWROOT);
             die();
         }
 

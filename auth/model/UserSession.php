@@ -8,8 +8,8 @@ class UserSession
 {
 
 
-    private \session\auth\UserBO $BOUser;
-    private \session\auth\UserFlare $FlareUser;
+    private UserBO $BOUser;
+    private UserFlare $FlareUser;
 
 
 

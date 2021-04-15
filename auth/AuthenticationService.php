@@ -24,7 +24,7 @@ interface AuthenticationService
 
     function authenticateClient($traineeId, $password);
 
-    function storeSession($auth);
+    function storeUserSession(\UserSession $auth);
 
     function getSession();
 

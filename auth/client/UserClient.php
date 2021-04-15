@@ -3,5 +3,5 @@
 namespace session\auth;
 interface  UserClient
 {
-    function authenticate();
+    function authenticate() : Response;
 }
