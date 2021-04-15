@@ -7,11 +7,8 @@ define('PACKAGEPATH', __DIR__);
 
 define('WEBURL', "http://{$_SERVER['HTTP_HOST']}");
 
-
-
-
 include(PACKAGEPATH . '/Boot.php');
 include(PACKAGEPATH . '/packages/CSSPackage.php');
 include(PACKAGEPATH . '/packages/JSPackage.php');
-
+session_start();
 //define('WEBROOT', "http://{$_SERVER['HTTP_HOST']}");

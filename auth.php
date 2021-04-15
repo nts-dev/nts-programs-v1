@@ -1,5 +1,4 @@
 <?php
-session_start();
 include('includes.php');
 include('config/SessionDatabase.php');
 include('auth/model/UserSession.php');
