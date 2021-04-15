@@ -50,4 +50,9 @@ class CSSPackage
     {
         echo '';
     }
+
+    static function ACE()
+    {
+//        echo '<link href="'.Boot::WWWROOT.'packages/lib/ace/" rel="stylesheet">';
+    }
 }

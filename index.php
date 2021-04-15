@@ -20,6 +20,7 @@ $session = unserialize($_SESSION['USER']);
 
 
 $user = $session->getBOUser();
+
 $eid = $user->getTraineeId();
 $username = $user->getAttendent();
 

@@ -141,6 +141,7 @@ class AuthenticationServiceImpl implements AuthenticationService
 
     function getSession(): ?UserSession
     {
+
         if ($this->sessionExists()) {
             $session = $_SESSION["USER"];
             return unserialize($session);

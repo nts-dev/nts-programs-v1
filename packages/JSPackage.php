@@ -44,4 +44,11 @@ class JSPackage
     {
         echo '<script type="text/javascript" src="'.Boot::WWWROOT.'packages/lib/nuevo/nuevo.min.js"></script>';
     }
+
+    static function ACE()
+    {
+        echo '<script type="text/javascript" src="'.Boot::WWWROOT.'packages/lib/ace/src/ace.js"></script>';
+        echo '<script type="text/javascript" src="'.Boot::WWWROOT.'packages/lib/ace/src/ext-beautify.js"></script>';
+
+    }
 }
