@@ -5,8 +5,6 @@ namespace auth;
 interface AuthenticationService
 {
 
-    const END_POINT = "login";
-    const API_URL = "nts-video-api/public/api/";
 
     /**
      * @param $traineeId
@@ -18,10 +16,10 @@ interface AuthenticationService
      *
      * - User enters NTS password and employee id
      * - System queries from BO user table where password and employee
-     * - System returns email,
-     * - System authenticates from flare api
-     * - System stores token in file system
-     * - System starts session
+     * - System returns user database row
+     * - System authenticates from flare api using returned row data
+     * - System stores token in file system :: TODO {Not sure}
+     * - System starts and stores session
      */
 
     function authenticateClient($traineeId, $password);

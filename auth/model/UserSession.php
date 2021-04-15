@@ -1,66 +1,22 @@
 <?php
 
 
+use session\auth\UserBO;
+use session\auth\UserFlare;
+
 class UserSession
 {
 
-    private $token;
-    private $tokenType;
-    private $expires;
-    private $BOUser;
+
+    private \session\auth\UserBO $BOUser;
+    private \session\auth\UserFlare $FlareUser;
+
+
 
     /**
-     * @return mixed
+     * @return
      */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
-     * @param mixed $token
-     */
-    public function setToken($token): void
-    {
-        $this->token = $token;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTokenType()
-    {
-        return $this->tokenType;
-    }
-
-    /**
-     * @param mixed $tokenType
-     */
-    public function setTokenType($tokenType): void
-    {
-        $this->tokenType = $tokenType;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getExpires()
-    {
-        return $this->expires;
-    }
-
-    /**
-     * @param mixed $expires
-     */
-    public function setExpires($expires): void
-    {
-        $this->expires = $expires;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getBOUser()
+    public function getBOUser():UserBO
     {
         return $this->BOUser;
     }
@@ -71,6 +27,22 @@ class UserSession
     public function setBOUser($BOUser)
     {
         $this->BOUser = $BOUser;
+    }
+
+    /**
+     * @return
+     */
+    public function getFlareUser(): UserFlare
+    {
+        return $this->FlareUser;
+    }
+
+    /**
+     * @param mixed $FlareUser
+     */
+    public function setFlareUser($FlareUser): void
+    {
+        $this->FlareUser = $FlareUser;
     }
 
 }

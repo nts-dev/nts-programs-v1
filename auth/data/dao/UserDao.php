@@ -1,6 +1,6 @@
 <?php
 
-namespace session\auth\dao;
+namespace session\auth;
 
 interface UserDao
 {

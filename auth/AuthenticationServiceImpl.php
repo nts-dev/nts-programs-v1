@@ -3,26 +3,20 @@
 namespace auth;
 
 
-use session\auth\dao\UserDao;
-use session\auth\dao\UserDaoImp;
-use session\config\Constants;
-
-use User;
+use session\auth\client\ClientBO;
+use session\auth\client\ClientContext;
+use session\auth\client\ClientFlare;
+use session\auth\User;
+use session\auth\UserBO;
+use session\auth\UserFlare;
 use UserSession;
 
 
 class AuthenticationServiceImpl implements AuthenticationService
 {
 
-    private UserDao $dao;
 
-    function __construct()
-    {
-        $this->dao = new UserDaoImp();
-    }
-
-
-    function authenticateClient($traineeId, $password)
+    function authenticateClient($traineeId, $password): ?UserSession
     {
 
         assert($traineeId != null);
@@ -43,9 +37,12 @@ class AuthenticationServiceImpl implements AuthenticationService
          *
          * 2 Request token from flare api
          */
-        $authResultJSON = $this->authenticateFromFlare($BOAuthenticatedUser);
+        $FLAREAuthenticatedUser = $this->authenticateFromFlare($BOAuthenticatedUser);
 
-        $authResult = json_decode($authResultJSON);
+
+        if ($FLAREAuthenticatedUser == null) {
+            return null;
+        }
 
 
         /**
@@ -56,14 +53,9 @@ class AuthenticationServiceImpl implements AuthenticationService
 
         if (isset($authResult->access_token)) {
             $userSession = new UserSession();
-
-            $userSession->setToken($authResult->access_token);
-            $userSession->setTokenType($authResult->token_type);
-            $userSession->setExpires($authResult->expires_at);
+            $userSession->setFlareUser($FLAREAuthenticatedUser);
             $userSession->setBOUser($BOAuthenticatedUser);
             $this->storeSession($userSession);
-
-//            echo json_encode(array("response" => true, "state" => 'success', "message" => "Welcome, your session started", "token" => $authResult->access_token));
             return $userSession;
         }
 
@@ -71,71 +63,77 @@ class AuthenticationServiceImpl implements AuthenticationService
         return null;
     }
 
-    private function authenticateFromBO($traineeId, $password): ?User
+    /**
+     *
+     *
+     *
+     *
+     *
+     * @param $traineeId
+     * @param $password
+     * @return UserBO|null
+     *
+     *
+     *
+     *
+     *
+     */
+    private function authenticateFromBO($traineeId, $password): ?UserBO
     {
-        return $this->dao->getUser($traineeId, $password);
 
+        $client = new ClientContext(new ClientBO($traineeId, $password));
+        return $client->authenticate();
     }
 
-    private function authenticateFromFlare(User $user)
+
+    /**
+     *
+     *
+     *
+     *
+     *
+     * @param UserBO $user type of UserBO
+     * @return User|null type of UserFlare
+     *
+     *
+     *
+     *
+     */
+    private function authenticateFromFlare(UserBO $user): ?UserFlare
     {
 
         assert($user != null);
 
-        $ch = curl_init();
-
-
-        $data = array(
-            "is_offline" => 1,
-            "internal" => 1,
-            "display_name" => $user->getFirstName(),
-            "first_name" => $user->getFirstName(),
-            "last_name" => $user->getLastName(),
-            "email" => $user->getEmail(),
-            "password" => $user->getPassword());
-
-        $POST = json_encode($data);
-
-        $URL = WEBROOT . self::API_URL . self::END_POINT;
-
-
-        $HEADER = [
-            'Content-Type: application/json'
-        ];
-
-
-        curl_setopt($ch, CURLOPT_URL, $URL);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $POST);
-
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $HEADER);
-
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-
-        $server_output = curl_exec($ch);
-
-        curl_close($ch);
-
-        return $server_output;
-
+        $client = new ClientContext(new ClientFlare($user));
+        return $client->authenticate();
     }
 
-    function storeSession($auth)
-    {
 
+    /**
+     *
+     *
+     *
+     *
+     *
+     *
+     * @param $auth
+     *
+     *
+     *
+     *
+     *
+     */
+
+    function storeSession(UserSession $auth)
+    {
         assert($auth != null);
-//        session_start();
         $_SESSION["USER"] = serialize($auth);
         session_commit();
-
 
     }
 
     function getSession(): ?UserSession
     {
-
         if ($this->sessionExists()) {
             $session = $_SESSION["USER"];
             return unserialize($session);
@@ -149,8 +147,8 @@ class AuthenticationServiceImpl implements AuthenticationService
         return !empty($_SESSION) && isset($_SESSION['USER']);
     }
 
-    function logout()
+    function logout(): bool
     {
-       return session_destroy ();
+        return session_destroy();
     }
 }
