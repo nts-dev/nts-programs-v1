@@ -5,9 +5,12 @@
 [submodule "nts-project"]
 	path = nts-project
 	url = https://github.com/nts-dev/nts-project.git
+	branch = main
 [submodule "docs-extract"]
 	path = docs-extract
 	url = https://github.com/nts-dev/docs-extract.git
+	branch = main
 [submodule "nts-video-api"]
 	path = nts-video-api
 	url = https://github.com/nts-dev/nts-video-api.git
+	branch = main
