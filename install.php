@@ -330,6 +330,11 @@ if ($install) {
         $db_password = get('db_password');
         $db_database = get('db_database');
 
+        $moodle_db_hostname = get('moodle_db_hostname');
+        $moodle_db_username = get('moodle_db_username');
+        $moodle_db_password = get('moodle_db_password');
+        $moodle_db_database = get('moodle_db_database');
+
         $dbc = mysqli_connect($db_hostname, $db_username, $db_password);
 
         // Check connection
@@ -420,10 +425,10 @@ if ($install) {
             $line = "require_once(__DIR__ . '/lib/setup.php');";
 
             $replace = "\n" . "require_once(\$_SERVER['DOCUMENT_ROOT'] .'" . $webroot . "Boot.php');" . "\n";
-            $replace .= "\n" . "\$CFG->dbhost    = Boot::DBHOST;";
-            $replace .= "\n" . "\$CFG->dbname    = Boot::DBNAME;";
-            $replace .= "\n" . "\$CFG->dbuser    = Boot::DBUSER;";
-            $replace .= "\n" . "\$CFG->dbpass    = Boot::DBPASS;" . "\n";
+            $replace .= "\n" . "\$CFG->dbhost    = Boot::MOODLE_DBHOST;";
+            $replace .= "\n" . "\$CFG->dbname    = Boot::MOODLE_DBNAME;";
+            $replace .= "\n" . "\$CFG->dbuser    = Boot::MOODLE_DBUSER;";
+            $replace .= "\n" . "\$CFG->dbpass    = Boot::MOODLE_DBPASS;" . "\n";
             $replace .= "\n" . "\$CFG->wwwroot   = 'http://'. \$_SERVER['HTTP_HOST'] .'" . rtrim($moodleroot, "/ ") . "';" . "\n";
             $replace .= "\n\n" . "require_once(__DIR__ . '/lib/setup.php');";
             $content = str_replace($line, $replace, $content);
@@ -441,7 +446,12 @@ if ($install) {
             $settings_file .= "\n" . " const DBUSER =  '$db_username';";
             $settings_file .= "\n" . " const DBPASS = '$db_password';";
             $settings_file .= "\n" . " const DBNAME = '$db_database';";
-            $settings_file .= "\n" . " const WWWROOT = '$webroot'; ";
+            $settings_file .= "\n" . " const WWWROOT = '$webroot'; "."\n";
+
+            $settings_file .= "\n" . " const MOODLE_DBHOST = '$moodle_db_hostname';";
+            $settings_file .= "\n" . " const MOODLE_DBUSER =  '$moodle_db_username';";
+            $settings_file .= "\n" . " const MOODLE_DBPASS = '$moodle_db_password';";
+            $settings_file .= "\n" . " const MOODLE_DBNAME = '$moodle_db_database';";
 
             $settings_file .= "\n" . "}";
 
@@ -479,17 +489,13 @@ if ($install) {
 
     <div id="layout">
         <form action="" method="POST">
-            <div class="title">Installation</div>
+            <div class="title">NTS Programs Configuration</div>
             <div>
                 <span>Install path</span>
                 <input type="text" name="dir"
                        value="http://<?php echo $_SERVER['HTTP_HOST'] . pathinfo($_SERVER['REQUEST_URI'])['dirname']; ?>">
             </div>
             <input type="hidden" name="db" value="1">
-            <div>
-                <span>Moodle path</span>
-                <input type="text" name="moodle" value="http://<?php echo $_SERVER['HTTP_HOST']; ?>/moodle">
-            </div>
             <div>
                 Database settings
                 <fieldset id="db_fieldset">
@@ -507,6 +513,28 @@ if ($install) {
                     </div>
                     <div>
                         <a href="?dump=1" target="_blank">Click here to download the database for manual installing.</a>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="title">Moodle Configuration</div>
+            <div>
+                <span>Moodle Intallation path</span>
+                <input type="text" name="moodle" value="http://<?php echo $_SERVER['HTTP_HOST']; ?>/moodle">
+            </div>
+            <div>
+                Moodle settings
+                <fieldset id="moodle_db_fieldset">
+                    <div><span>Moodle Database Hostname</span>
+                        <input type="text" name="moodle_db_hostname" value="">
+                    </div>
+                    <div><span>Moodle Database Username</span>
+                        <input type="text" name="moodle_db_username" value="">
+                    </div>
+                    <div><span>Moodle Database Password</span>
+                        <input type="text" name="moodle_db_password" value="">
+                    </div>
+                    <div><span>Moodle Database Name</span>
+                        <input type="text" name="moodle_db_database" value="moodle">
                     </div>
                 </fieldset>
             </div>
