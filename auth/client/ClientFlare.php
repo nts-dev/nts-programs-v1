@@ -23,11 +23,9 @@ class ClientFlare implements UserClient
 
     function authenticate(): Response
     {
-
-        $data = $this->network->getUser($this->user);
-        $authResult = json_decode($data);
-
         try {
+            $data = $this->network->getUser($this->user);
+            $authResult = json_decode($data);
             if (isset($authResult->access_token)) {
                 $this->authenticatedUser->setToken($authResult->access_token);
                 $this->authenticatedUser->setTokenType($authResult->token_type);
@@ -38,5 +36,6 @@ class ClientFlare implements UserClient
         } catch (Exception $e) {
             return new Response(State::FAIL, $this->user, $e->getMessage());
         }
+        return new Response(State::FAIL, $this->user, "client Auth failed");
     }
 }

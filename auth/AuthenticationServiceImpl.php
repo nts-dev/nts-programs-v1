@@ -14,7 +14,10 @@ use UserSession;
 
 class AuthenticationServiceImpl implements AuthenticationService
 {
-
+    public function __construct()
+    {
+        unset($_SESSION['ERRORS']);
+    }
 
     function authenticateClient($traineeId, $password): bool
     {
@@ -32,7 +35,7 @@ class AuthenticationServiceImpl implements AuthenticationService
 //        var_dump($BOAuthenticatedUser);
 
         if ($BOResponse->getState() == State::FAIL) {
-             $this->storeErrorSession($BOResponse->getMessage());
+            $this->storeErrorSession($BOResponse->getMessage());
             return false;
         }
 
@@ -46,7 +49,7 @@ class AuthenticationServiceImpl implements AuthenticationService
 //        var_dump($FLAREAuthenticatedUser);
 
 
-        if ($FlareResponse == State::FAIL) {
+        if ($FlareResponse->getState() == State::FAIL) {
             $this->storeErrorSession($FlareResponse->getMessage());
             return false;
         }
@@ -56,6 +59,9 @@ class AuthenticationServiceImpl implements AuthenticationService
          *
          * 3 Store user session
          */
+
+        if (isset($_SESSION['ERRORS']))
+            return false;
 
 
         $userSession = new UserSession();
