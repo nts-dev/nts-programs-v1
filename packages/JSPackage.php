@@ -37,7 +37,7 @@ class JSPackage
     }
     static function TINYMCE()
     {
-        echo '<script type="text/javascript" src="'.Boot::WWWROOT.'packages/lib/tinymce/tinymce.min.js"></script>';
+        echo '<script type="text/javascript" src="'.Boot::WWWROOT.'packages/lib/tinymce/tinymce.min.js?v=1"></script>';
     }
 
     static function NUEVO()
